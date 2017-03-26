@@ -4,6 +4,7 @@ import GetOldTweets.got3 as got
 import tweepy
 import re,string
 from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
 import unicodedata
 
 # Create variables for each key, secret, token
@@ -21,12 +22,34 @@ def printTweet(descr, t):
 	print ("Hashtags: %s\n" % t.hashtags)
 
 def elimina_tildes(cadena):
-    # http://guimi.net
-    # Cambiamos caracteres modificados (áüç...) por los caracteres base (auc...)
-    # Basado en una función de Miguel en
-    # http://www.leccionespracticas.com/uncategorized/eliminar-tildes-con-python-solucionado/
-    s = ''.join((c for c in unicodedata.normalize('NFD',cadena) if unicodedata.category(c) != 'Mn'))
-    return s
+	# http://guimi.net
+	# Cambiamos caracteres modificados (áüç...) por los caracteres base (auc...)
+	# Basado en una función de Miguel en
+	# http://www.leccionespracticas.com/uncategorized/eliminar-tildes-con-python-solucionado/
+	s = ''.join((c for c in unicodedata.normalize('NFD',cadena) if unicodedata.category(c) != 'Mn'))
+	return s
+
+def detectarLenguaje(text_to_detect):
+	languages = ["spanish","english"]
+	tokens = word_tokenize(text_to_detect)
+	tokens = [t.strip().lower() for t in tokens] # Convierte todos los textos a minúsculas para su posterior comparación
+
+	lang_count = {}
+	# Por cada idioma
+	for lang in languages:
+		# Obtenemos las stopwords del idioma del módulo nltk
+		stop_words = stopwords.words(lang)
+		lang_count[lang] = 0 # Inicializa a 0 el contador para cada idioma
+
+		# Recorremos las palabras del texto a analizar
+		for word in tokens:
+			if word in stop_words: # Si la palabra se encuentra entre las stopwords, incrementa el contador
+				lang_count[lang] += 1
+
+	# Obtiene el idioma con el número mayor de coincidencias
+	detected_language = max(lang_count, key=lang_count.get)
+
+	return detected_language
 
 def textFilter(t):
 	#We only want to work with lowercase for the comparisons
@@ -53,13 +76,15 @@ def main():
 
 	friends = tweepy.Cursor(api.friends).items()
 	for friend in friends:
-		print("### USUARIO:",friend.screen_name,"###")
 		# Get tweets
-		tweetCriteria = got.manager.TweetCriteria().setUsername(friend.screen_name).setQuerySearch('baseball').setSince("2016-08-01").setUntil("2017-02-01").setMaxTweets(100)
+		tweetCriteria = got.manager.TweetCriteria().setUsername(friend.screen_name
+							).setQuerySearch('baseball').setSince("2016-08-01"
+							).setUntil("2017-02-01").setMaxTweets(100)
 		tweet = got.manager.TweetManager.getTweets(tweetCriteria)
 		# Print tweets
 		for t in tweet:
-			data_file.write(friend.screen_name +","+t.text+","+str(t.retweets)+"\n")
+			if "spanish" == detectarLenguaje(t.text):
+				data_file.write(friend.screen_name +","+t.text+","+str(t.retweets)+"\n")
 			important_words = textFilter(t.text)
 			print("----------------------------------")
 			print(t.text)
