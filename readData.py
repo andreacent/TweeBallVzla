@@ -51,6 +51,7 @@ def writeStemmingFile(filename,words_stemmer):
 # Cota minima de cantidad de ocurrencias de una 
 # palabra para ser tomada en cuenta
 def getCota():
+	#max_fcy = max(words_dict.values())
 	sum_ocu = 0
 	for k,v in words_dict.items():
 		sum_ocu += v
@@ -68,13 +69,17 @@ def readTrainingData(filename):
 		reader = csv.reader(data_file)
 		next(reader)
 		for l in reader:
-			important_words = textFilter(l[1].lower())
+			try:
+				tukky = int(l[3]) 
+				important_words = textFilter(l[1].lower())
 
-			if important_words:
-				data.append( [ important_words, int(l[3]) ] )
-				print(l[1])
-				print(important_words)
-				print("--------------------------------")
+				if important_words:
+					data.append( [ important_words, tukky ] )
+					print(l[1])
+					print(important_words)
+					print("--------------------------------")
+			except:
+				pass
 
 		np.random.shuffle(data)
 
@@ -119,6 +124,7 @@ def isHashtag(x):
 
 ##############################################
 # Detect words in text
+# Delete stopwords and do stemming
 # @param String text
 def textFilter(text):	
 	#elimina tildes
