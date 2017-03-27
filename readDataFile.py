@@ -7,10 +7,13 @@ import Stemmer
 
 words_stemmer = {}
 
+def hasNumbers(inputString):
+	return any(char.isdigit() for char in inputString)
+
 def textFilter(text):	
 	#elimina tildes
 	scentence = ''.join((c for c in unicodedata.normalize('NFD',text) if unicodedata.category(c) != 'Mn')) 
-	words = [x for x in scentence.split() if x[0]!="@" and x[0]!="#"]
+	words = [x for x in scentence.split() if not hasNumbers(x) and x[0]!="@" and x[0]!="#" and x.find("http") < 0 and x.find(".com") < 0 and x.find("/") < 0 ]
 	#remove punctuation and split into seperate words
 	words = re.findall(r'\w+', " ".join(words),flags = re.UNICODE | re.LOCALE)
 
