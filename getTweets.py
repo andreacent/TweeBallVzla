@@ -25,7 +25,7 @@ def writeTweetInFile(friend,data_file,busqueda,tukky):
 	for t in tweet:
 		if not t.text in scentences_friend and "es" == detect(t.text):
 			scentences_friend.append(t.text)
-			data_file.write(friend.screen_name +","+t.text+","+str(t.retweets)+","+str(tukky)+"\n")
+			data_file.write(friend.screen_name +",\""+t.text+"\","+str(t.retweets)+","+str(tukky)+"\n")
 			#print(t.text)
 			#print("----------------------------------")
 
