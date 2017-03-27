@@ -2,44 +2,20 @@
 # -*- coding: utf-8 -*-
 import sys
 import network
-import numpy as np
-
-#Split data
-def split(data,percentage):
-    rows=len(data)
-    trainRows=int(round((percentage*rows)/float(100)))
-    trainD = data[:trainRows]
-    testD = data[trainRows:]
-    return trainD,testD
-
-##############################################
-# Read file
-# @param [File] data_file : file with data
-def readDataFile(filename):
-    inputs,target, data = [],[],[]
-
-    with open(filename, 'r', encoding="utf-8") as data_file:
-        for line in data_file:
-            l =line.split(",")
-
-            if (l[-1][:-1] == "Iris-setosa"):
-                data.append([ float(l[0]), float(l[1]), float(l[2]), float(l[3]), float(1) ])
-
-            else:
-                data.append([ float(l[0]), float(l[1]), float(l[2]), float(l[3]), float(0) ])
-
-        np.random.shuffle(data)
-            
-        for d in data:
-            inputs.append([ d[0], d[1], d[2], d[3] ])
-            target.append([ d[4] ])
-
-    return inputs, target
+import readData as rd
 
 ##############################################
 # MAIN
 def main(argv):
-    inputs, target = readDataFile(argv[1])
+    data,words = rd.readTrainingData(argv[1])
+    d_input,d_target = rd.transformData(data,words)
+    del data
+
+    print(words)
+    for i in range(len(d_input)):
+        print(d_input[i],d_target[i])
+
+    '''
     percentage=[50,60,70,80,90]
 
     for p in percentage:
@@ -94,6 +70,7 @@ def main(argv):
 
             print("Predicciones correctas:",buenas,"\nFalso positivo:",falso_positivo,"\nFalso negativo:",falso_negativo,"\n")
 
+    '''
 
 if __name__ == "__main__":
     main(sys.argv)

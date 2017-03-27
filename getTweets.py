@@ -19,7 +19,7 @@ scentences_friend = []
 def writeTweetInFile(friend,data_file,busqueda,tukky):
 	tweetCriteria = got.manager.TweetCriteria().setUsername(friend.screen_name
 						).setQuerySearch(busqueda).setSince("2016-08-01"
-						).setUntil("2017-02-01").setMaxTweets(20)
+						).setUntil("2017-02-01").setMaxTweets(10)
 	tweet = got.manager.TweetManager.getTweets(tweetCriteria)
 	# Print tweets
 	for t in tweet:
