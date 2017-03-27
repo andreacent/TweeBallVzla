@@ -47,7 +47,7 @@ def textFilter(text):
 
 	return important_words
 
-def writeTweetInFile(friend,data_file,busqueda):
+def writeTweetInFile(friend,data_file,busqueda,tukky):
 	tweetCriteria = got.manager.TweetCriteria().setUsername(friend.screen_name
 						).setQuerySearch(busqueda).setSince("2016-08-01"
 						).setUntil("2017-02-01").setMaxTweets(12)
@@ -56,7 +56,7 @@ def writeTweetInFile(friend,data_file,busqueda):
 	for t in tweet:
 		if not t.text in scentences_friend and "es" == detect(t.text):
 			scentences_friend.append(t.text)
-			data_file.write(friend.screen_name +","+t.text+","+str(t.retweets)+"\n")
+			data_file.write(friend.screen_name +","+t.text+","+str(t.retweets)+","+str(tukky)+"\n")
 			#important_words = textFilter(t.text.lower())
 			print(t.text)
 			#print(important_words)
@@ -64,22 +64,22 @@ def writeTweetInFile(friend,data_file,busqueda):
 
 def main():
 	data_file = open("datos.csv",'w')
-	data_file.write("USERNAME,TEXT,RETWEETS\n")
+	data_file.write("USERNAME,TEXT,RETWEETS,ABOUT_BASEBALL\n")
 
 	friends = tweepy.Cursor(api.friends).items()
 	for friend in friends:
-		writeTweetInFile(friend,data_file,'magallanes')
-		writeTweetInFile(friend,data_file,'leones del caracas')
-		writeTweetInFile(friend,data_file,'cardenales de lara')
-		writeTweetInFile(friend,data_file,'tigres de aragua')
-		writeTweetInFile(friend,data_file,'tiburones de la guaira')
-		writeTweetInFile(friend,data_file,'bravos de margarita')
-		writeTweetInFile(friend,data_file,'aguilas del zulia')
-		writeTweetInFile(friend,data_file,'caribes de anzoategui')
-		writeTweetInFile(friend,data_file,'lvbp')
-		writeTweetInFile(friend,data_file,'baseball')
-		writeTweetInFile(friend,data_file,'beisbol venezuela')
-		writeTweetInFile(friend,data_file,'sabios del vargas')
+		writeTweetInFile(friend,data_file,'magallanes',1)
+		writeTweetInFile(friend,data_file,'leones del caracas',1)
+		writeTweetInFile(friend,data_file,'cardenales de lara',1)
+		writeTweetInFile(friend,data_file,'tigres de aragua',1)
+		writeTweetInFile(friend,data_file,'tiburones de la guaira',1)
+		writeTweetInFile(friend,data_file,'bravos de margarita',1)
+		writeTweetInFile(friend,data_file,'aguilas del zulia',1)
+		writeTweetInFile(friend,data_file,'caribes de anzoategui',1)
+		writeTweetInFile(friend,data_file,'lvbp',1)
+		writeTweetInFile(friend,data_file,'baseball',1)
+		writeTweetInFile(friend,data_file,'beisbol venezuela',1)
+		writeTweetInFile(friend,data_file,'sabios del vargas',1)
 		del scentences_friend[:]
 	
 	data_file.close()
