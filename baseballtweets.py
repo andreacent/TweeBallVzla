@@ -4,91 +4,83 @@ import GetOldTweets.got3 as got
 import tweepy
 import re,string
 from nltk.corpus import stopwords
-from nltk.tokenize import word_tokenize
 import unicodedata
+import Stemmer
+from langdetect import detect
 
 # Create variables for each key, secret, token
 consumer_key = 'kJCKcjHi0ffCL8qckgywLct5P'
 consumer_secret = 're6vu4Y9ttmmkZ4ks80prrAZWNgzPAOQntMLiTPKdiO2ms5WMG'
 access_token = '846018269400256514-09MOwPk5ftW9wSgKu5aHB3HT3kz66bt'
 access_token_secret = 'Rgabs0Jmbin6SCVEA6ixnnfAlmUrtL1go8JbD630xwAXs'
+# Set up OAuth and integrate with API
+auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+auth.set_access_token(access_token, access_token_secret)
+api = tweepy.API(auth, wait_on_rate_limit=True)
 
-def printTweet(descr, t):
-	print (descr)
-	print ("Username: %s" % t.username)
-	print ("Retweets: %d" % t.retweets)
-	print ("Text: %s" % t.text)
-	print ("Mentions: %s" % t.mentions)
-	print ("Hashtags: %s\n" % t.hashtags)
+words_stemmer = {}
+scentences_friend = []
 
-def elimina_tildes(cadena):
-	# http://guimi.net
-	# Cambiamos caracteres modificados (áüç...) por los caracteres base (auc...)
-	# Basado en una función de Miguel en
-	# http://www.leccionespracticas.com/uncategorized/eliminar-tildes-con-python-solucionado/
-	s = ''.join((c for c in unicodedata.normalize('NFD',cadena) if unicodedata.category(c) != 'Mn'))
-	return s
-
-def detectarLenguaje(text_to_detect):
-	languages = ["spanish","english"]
-	tokens = word_tokenize(text_to_detect)
-	tokens = [t.strip().lower() for t in tokens] # Convierte todos los textos a minúsculas para su posterior comparación
-
-	lang_count = {}
-	# Por cada idioma
-	for lang in languages:
-		# Obtenemos las stopwords del idioma del módulo nltk
-		stop_words = stopwords.words(lang)
-		lang_count[lang] = 0 # Inicializa a 0 el contador para cada idioma
-
-		# Recorremos las palabras del texto a analizar
-		for word in tokens:
-			if word in stop_words: # Si la palabra se encuentra entre las stopwords, incrementa el contador
-				lang_count[lang] += 1
-
-	# Obtiene el idioma con el número mayor de coincidencias
-	detected_language = max(lang_count, key=lang_count.get)
-
-	return detected_language
-
-def textFilter(t):
-	#We only want to work with lowercase for the comparisons
-	scentence = t.lower() 
+def textFilter(text):	
 	#elimina tildes
-	scentence = elimina_tildes(scentence)
+	scentence = ''.join((c for c in unicodedata.normalize('NFD',text) if unicodedata.category(c) != 'Mn')) 
 	words = [x for x in scentence.split() if x[0]!="@" and x[0]!="#"]
 	#remove punctuation and split into seperate words
 	words = re.findall(r'\w+', " ".join(words),flags = re.UNICODE | re.LOCALE)
-	#This is the more pythonic way
-	important_words = filter(lambda x: x not in stopwords.words('spanish'), words)
+
+	stemmer = Stemmer.Stemmer('spanish') 	#stemming
+	stop_words = stopwords.words('spanish') 	#stopwords
+
+	important_words =[]
+	for w in words:
+		if w in ["sr"]:
+			pass
+		elif w not in stop_words:			#stopwords
+			word = stemmer.stemWord(w)	#stemming
+			if not word in important_words:
+				important_words.append(word)
+
+			if word in words_stemmer:
+				words_stemmer[word].append(w)
+			else:
+				words_stemmer[word] = [w]
 
 	return important_words
 
+def writeTweetInFile(friend,data_file,busqueda):
+	tweetCriteria = got.manager.TweetCriteria().setUsername(friend.screen_name
+						).setQuerySearch(busqueda).setSince("2016-08-01"
+						).setUntil("2017-02-01").setMaxTweets(12)
+	tweet = got.manager.TweetManager.getTweets(tweetCriteria)
+	# Print tweets
+	for t in tweet:
+		if not t.text in scentences_friend and "es" == detect(t.text):
+			scentences_friend.append(t.text)
+			data_file.write(friend.screen_name +","+t.text+","+str(t.retweets)+"\n")
+			#important_words = textFilter(t.text.lower())
+			print(t.text)
+			#print(important_words)
+			print("----------------------------------")
+
 def main():
-
-	# Set up OAuth and integrate with API
-	auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-	auth.set_access_token(access_token, access_token_secret)
-	api = tweepy.API(auth, wait_on_rate_limit=True)
-
 	data_file = open("datos.csv",'w')
 	data_file.write("USERNAME,TEXT,RETWEETS\n")
 
 	friends = tweepy.Cursor(api.friends).items()
 	for friend in friends:
-		# Get tweets
-		tweetCriteria = got.manager.TweetCriteria().setUsername(friend.screen_name
-							).setQuerySearch('baseball').setSince("2016-08-01"
-							).setUntil("2017-02-01").setMaxTweets(100)
-		tweet = got.manager.TweetManager.getTweets(tweetCriteria)
-		# Print tweets
-		for t in tweet:
-			if "spanish" == detectarLenguaje(t.text):
-				data_file.write(friend.screen_name +","+t.text+","+str(t.retweets)+"\n")
-			important_words = textFilter(t.text)
-			print("----------------------------------")
-			print(t.text)
-			print(" ".join(important_words))
+		writeTweetInFile(friend,data_file,'magallanes')
+		writeTweetInFile(friend,data_file,'leones del caracas')
+		writeTweetInFile(friend,data_file,'cardenales de lara')
+		writeTweetInFile(friend,data_file,'tigres de aragua')
+		writeTweetInFile(friend,data_file,'tiburones de la guaira')
+		writeTweetInFile(friend,data_file,'bravos de margarita')
+		writeTweetInFile(friend,data_file,'aguilas del zulia')
+		writeTweetInFile(friend,data_file,'caribes de anzoategui')
+		writeTweetInFile(friend,data_file,'lvbp')
+		writeTweetInFile(friend,data_file,'baseball')
+		writeTweetInFile(friend,data_file,'beisbol venezuela')
+		writeTweetInFile(friend,data_file,'sabios del vargas')
+		del scentences_friend[:]
 	
 	data_file.close()
 	
