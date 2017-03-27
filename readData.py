@@ -37,7 +37,8 @@ def transformData(data,words):
 ##############################################
 # Write file with stemming's words
 # @param String filename 
-def writeStemmingFile(filename):
+# @param {String:{String}} words_stemmer
+def writeStemmingFile(filename,words_stemmer):
 	data_file = open(filename,'w')
 	data_file.write("### <Raiz> -> <Palabras> ###")
 	for k,v in words_stemmer.items():
@@ -47,7 +48,8 @@ def writeStemmingFile(filename):
 	data_file.close()
 
 ##############################################
-# Cota minima de cantidad de ocurrencias de una palabra para ser tomada en cuenta
+# Cota minima de cantidad de ocurrencias de una 
+# palabra para ser tomada en cuenta
 def getCota():
 	sum_ocu = 0
 	for k,v in words_dict.items():
@@ -84,19 +86,28 @@ def readTrainingData(filename):
 		else:
 			words_stemmer.pop(k,None)
 
-	writeStemmingFile("Datos/stemming.txt")
+	writeStemmingFile("Datos/stemming.txt",words_stemmer)
 
 	words_stemmer.clear()
 	words_dict.clear()
 
 	return data,words
 
+##############################################
+# Say if string is a number
+# @param String inputString
 def hasNumbers(inputString):
 	return any(char.isdigit() for char in inputString)
 
+##############################################
+# Say if string is a link
+# @param String x
 def isLink(x):
 	return x.find("http") >= 0 or x.find(".com") >= 0 or x.find("/") >= 0
 
+##############################################
+# Say if string is not a valid hashtag
+# @param String x
 def isHashtag(x):
 	sig_words = ['magallanes','leones','cardenales','tigres',
 					'tiburones','bravos','aguilas',
@@ -106,6 +117,9 @@ def isHashtag(x):
 		return False if x[1:].lower() in sig_words else True
 	return False
 
+##############################################
+# Detect words in text
+# @param String text
 def textFilter(text):	
 	#elimina tildes
 	scentence = ''.join((c for c in unicodedata.normalize('NFD',text) if unicodedata.category(c) != 'Mn')) 
