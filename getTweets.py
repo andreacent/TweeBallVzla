@@ -19,6 +19,7 @@ api = tweepy.API(auth, wait_on_rate_limit=True)
 scentences_friend = []
 
 def writeTweetInFile(friend,writer,busqueda,tukky):
+	tweet = []
 	try:
 		tweetCriteria = got.manager.TweetCriteria().setUsername(friend.screen_name
 							).setQuerySearch(busqueda).setSince("2016-10-01"
@@ -46,10 +47,9 @@ def main(argv):
 	writer = csv.writer(csv_file, delimiter=',')
 	writer.writerow(["USERNAME","TEXT","RETWEETS","ABOUT_BASEBALL"])
 
-	baseball_kw = [ 'magallanes','leones del caracas','cardenales de lara',
-					'tigres de aragua','tiburones de la guaira','bravos de margarita',
-					'aguilas del zulia', 'caribes de anzoategui','lvbp','baseball',
-					'beisbol venezuela','sabios del vargas']
+	baseball_kw = [ 'magallanes','leones del caracas','cardenales de lara','beisbol',
+					'tigres de aragua','tiburones de la guaira','caribes de anzoategui',
+					'aguilas del zulia','lvbp','bravos de margarita','baseball']
 	normal_kw = [ 	'cine','restaurante','pasear','perros de la calle','simon bolivar',
 					'socialismo','grammy','pelicula','comida','computacion','linux',
 					'opsu','poemas','musica','aeropuerto','empanada','fundacion']
