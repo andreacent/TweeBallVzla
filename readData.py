@@ -56,7 +56,7 @@ def getCota():
 	for k,v in words_dict.items():
 		sum_ocu += v
 	average = sum_ocu / len(words_dict)
-	cota = round(average*0.4)
+	cota = round(average*0.5)
 	print(cota)
 	return cota if cota > 1 else 1
 
