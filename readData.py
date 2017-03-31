@@ -56,7 +56,8 @@ def getCota():
 	for k,v in words_dict.items():
 		sum_ocu += v
 	average = sum_ocu / len(words_dict)
-	cota = round(average*0.2)
+	cota = round(average*0.4)
+	print(cota)
 	return cota if cota > 1 else 1
 
 ##############################################
@@ -75,9 +76,9 @@ def readTrainingData(filename):
 
 				if important_words:
 					data.append( [ important_words, tukky ] )
-					print(l[1])
-					print(important_words)
-					print("--------------------------------")
+					#print(l[1])
+					#print(important_words)
+					#print("--------------------------------")
 			except:
 				pass
 
