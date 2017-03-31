@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env pytho    
 # -*- coding: utf-8 -*-
 import sys
 import network
@@ -10,32 +10,33 @@ def main(argv):
     data,words = rd.readTrainingData(argv[1])
     d_input,d_target = rd.transformData(data,words)
     del data
-
+    
     print(words)
-    for i in range(len(d_input)):
-        print(d_input[i],d_target[i])
 
-    '''
-    percentage=[50,60,70,80,90]
+    #for i in range(len(d_input)):
+    #    print(d_input[i],d_target[i])
+
+    percentage=[50,60]
+    n_words = len(words)
 
     for p in percentage:
-        trainI, testI = split(inputs,p)
-        trainT, testT = split(target,p)
+        trainI, testI = split(d_input,p)
+        trainT, testT = split(d_target,p)
         print("\n####################   "+str(p)+"%   ####################\nTrain input rows: "+str(len(trainI)))
         print("Train target rows: ",len(trainT))
         print("Test input rows: ",len(testI))
         print("Test target rows: ",len(testT),"\n")
 
         filename = argv[1].split(".")[0]+str(p)+"%"+"-neuronas-"
-        filename = "SALIDAS31/"+filename.split("/")[1]
+        filename = "SALIDA/"+filename.split("/")[1]
 
         nn_list = []
 
         #Normalizar
-        trainI = network.normalize_array(trainI)
+        #trainI = network.normalize_array(trainI)
 
-        for k in range(4,11):
-            nn = network.NeuralNetwork(2,k,1)
+        for k in range(4,5):
+            nn = network.NeuralNetwork(n_words,k,1)
             nn.backPropUpdate(trainI, trainT, 0.1, 1000, filename+str(k)+".txt")
             nn_list.append(nn)
 
@@ -45,12 +46,12 @@ def main(argv):
         
         t_inputs = [x[:] for x in old_t_inputs]
         #Normalizar
-        t_inputs = network.normalize_array(t_inputs)
+        #t_inputs = network.normalize_array(t_inputs)
 
         for n in nn_list:
 
             print("---------NEURONAS ",n.num_h,"----------")
-            nn = network.NeuralNetwork(2,n.num_h,1) #red tam2
+            nn = network.NeuralNetwork(n_words,n.num_h,1) #red tam2
 
             buenas = 0
             falso_positivo = 0
