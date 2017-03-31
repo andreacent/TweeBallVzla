@@ -1,0 +1,99 @@
+
+####################   2 Hidden Layer   ####################
+
+
+####################   50%   ####################
+Train input rows: 498
+Train target rows:  498
+Test input rows:  499
+Test target rows:  499 
+
+---------NEURONAS  4 ----------
+Predicciones correctas: 472 
+Falso positivo: 10 
+Falso negativo: 17 
+
+---------NEURONAS  5 ----------
+Predicciones correctas: 441 
+Falso positivo: 47 
+Falso negativo: 11 
+
+---------NEURONAS  6 ----------
+Predicciones correctas: 462 
+Falso positivo: 30 
+Falso negativo: 7 
+
+---------NEURONAS  7 ----------
+Predicciones correctas: 456 
+Falso positivo: 17 
+Falso negativo: 26 
+
+---------NEURONAS  8 ----------
+Predicciones correctas: 467 
+Falso positivo: 15 
+Falso negativo: 17 
+
+
+####################   60%   ####################
+Train input rows: 598
+Train target rows:  598
+Test input rows:  399
+Test target rows:  399 
+
+---------NEURONAS  4 ----------
+Predicciones correctas: 377 
+Falso positivo: 14 
+Falso negativo: 8 
+
+---------NEURONAS  5 ----------
+Predicciones correctas: 359 
+Falso positivo: 27 
+Falso negativo: 13 
+
+---------NEURONAS  6 ----------
+Predicciones correctas: 372 
+Falso positivo: 16 
+Falso negativo: 11 
+
+---------NEURONAS  7 ----------
+Predicciones correctas: 371 
+Falso positivo: 15 
+Falso negativo: 13 
+
+---------NEURONAS  8 ----------
+Predicciones correctas: 381 
+Falso positivo: 10 
+Falso negativo: 8 
+
+
+####################   70%   ####################
+Train input rows: 698
+Train target rows:  698
+Test input rows:  299
+Test target rows:  299 
+
+---------NEURONAS  4 ----------
+Predicciones correctas: 281 
+Falso positivo: 9 
+Falso negativo: 9 
+
+---------NEURONAS  5 ----------
+Predicciones correctas: 286 
+Falso positivo: 6 
+Falso negativo: 7 
+
+---------NEURONAS  6 ----------
+Predicciones correctas: 282 
+Falso positivo: 8 
+Falso negativo: 9 
+
+---------NEURONAS  7 ----------
+Predicciones correctas: 280 
+Falso positivo: 11 
+Falso negativo: 8 
+
+---------NEURONAS  8 ----------
+Predicciones correctas: 284 
+Falso positivo: 8 
+Falso negativo: 7 
+
