@@ -38,11 +38,11 @@ def transformData(data,words):
 # Write file with stemming's words
 # @param String filename 
 # @param {String:{String}} words_stemmer
-def writeStemmingFile(filename,words_stemmer):
+def writeStemmingFile(filename,words_stemmer,words_dict):
 	data_file = open(filename,'w')
 	data_file.write("### <Raiz> -> <Palabras> ###")
 	for k,v in words_stemmer.items():
-		data_file.write("\n"+k +" -> ")
+		data_file.write("\n["+str(words_dict[k])+"]"+k +" -> ")
 		for w in v:
 			data_file.write(w+" ")
 	data_file.close()
@@ -92,7 +92,7 @@ def readTrainingData(filename):
 		else:
 			words_stemmer.pop(k,None)
 
-	writeStemmingFile("Datos/stemming.txt",words_stemmer)
+	writeStemmingFile("Datos/stemming.txt",words_stemmer,words_dict)
 
 	words_stemmer.clear()
 	words_dict.clear()
@@ -130,7 +130,7 @@ def isHashtag(x):
 def textFilter(text):	
 	#elimina tildes
 	scentence = ''.join((c for c in unicodedata.normalize('NFD',text) if unicodedata.category(c) != 'Mn')) 
-	words = [x for x in scentence.split() if not (hasNumbers(x) or x[0]=="@" or isHashtag(x) or isLink(x))]
+	words = [x for x in scentence.split() if not (hasNumbers(x) or x[0]=="@" or isHashtag(x) or isLink(x) or x=="_oficial")]
 	#remove punctuation and split into seperate words
 	words = re.findall(r'\w+', " ".join(words),flags = re.UNICODE | re.LOCALE)
 
