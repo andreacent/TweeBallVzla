@@ -43,7 +43,7 @@ def writeTweetInFile(friend,writer,busqueda,tukky):
 
 def main(argv):
 	type_tweets = int(argv[2])
-	csv_file = open("Datos/"+argv[1], "w", newline='')
+	csv_file = open("Datos/"+argv[1]+".csv", "w", newline='')
 	writer = csv.writer(csv_file, delimiter=',')
 	writer.writerow(["USERNAME","TEXT","RETWEETS","ABOUT_BASEBALL"])
 
