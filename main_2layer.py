@@ -24,8 +24,7 @@ def main(argv):
     #for i in range(len(d_input)):
     #    print(d_input[i],d_target[i])
 
-    #percentage=[50,60,70]
-    percentage=[50]
+    percentage=[50,60,70]
     n_words = len(words)
     print("\n####################   2 Hidden Layer   ####################\n")
     for p in percentage:
@@ -44,7 +43,7 @@ def main(argv):
         #Normalizar
         #trainI = network.normalize_array(trainI)
 
-        for k in range(4,5):
+        for k in range(4,9):
             nn = network.NeuralNetwork(n_words,k,1)
             nn.backPropUpdate(trainI, trainT, 0.1, 1000, filename+str(k)+".txt")
             nn_list.append(nn)
@@ -66,7 +65,7 @@ def main(argv):
             falso_positivo = 0
             falso_negativo = 0
             for i in range(len(t_inputs)):
-                output=nn.predict(t_inputs[i],n.weight_i,n.weight_o)
+                output=nn.predict(t_inputs[i],n.weight_i,n.weight_h, n.weight_o)
                 for o in range(len(output)):
                     resultado = round(abs(output[o]),0)
                     if t_target[i][o] == resultado:
