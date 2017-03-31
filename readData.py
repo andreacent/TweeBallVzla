@@ -31,7 +31,7 @@ def transformData(data,words):
 	d_input,d_target = [],[]
 	for d in data:
 		d_input.append(getListData(d[0],words))
-		d_target.append(d[1])
+		d_target.append([d[1]])
 	return d_input,d_target 
 
 ##############################################
